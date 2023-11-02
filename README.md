@@ -1,6 +1,6 @@
 # striphtml
 
-Fork of [jaytaylor/html2text](https://github.com/jaytaylor/html2text) with changes to CLI and HTTP server built around it.
+Fork of [jaytaylor/html2text](https://github.com/jaytaylor/html2text) with changes to add more extensive CLI and HTTP server built around it.
 
 ## Introduction
 
@@ -133,5 +133,5 @@ Permissive MIT license.
 
 ## Alternatives
 
-<https://github.com/jaytaylor/html2text> - Original implementation
-<https://github.com/k3a/html2text> - Lightweight
+- <https://github.com/jaytaylor/html2text> - Original implementation
+- <https://github.com/k3a/html2text> - Lightweight
