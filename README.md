@@ -20,6 +20,24 @@ go get github.com/JayJamieson/striphtml
 
 ## Example usage
 
+```shell
+striphtml can be run as a standalone command or HTTP Server.
+
+Standalone:
+$ cat index.html | striphtml
+
+$ striphtml < index.html
+
+HTTP Server:
+$ striphtml serve -p 8080
+
+Strip html from a provided url:
+$ curl -X GET http://localhost:8080/strip -d 'url=https://www.google.com'
+
+Send html directly:
+$ curl -X POST -H 'Content-Type: text/html' http://localhost:8080/strip -d '<div>Hello world!</div>'
+```
+
 ### Library
 
 ```go
