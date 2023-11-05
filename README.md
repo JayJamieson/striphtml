@@ -32,7 +32,7 @@ HTTP Server:
 $ striphtml serve -p 8080
 
 Strip html from a provided url:
-$ curl -X GET http://localhost:8080/strip -d 'url=https://www.google.com'
+$ curl -X GET http://localhost:8080/strip?url=https://www.google.com
 
 Send html directly:
 $ curl -X POST -H 'Content-Type: text/html' http://localhost:8080/strip -d '<div>Hello world!</div>'
