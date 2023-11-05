@@ -19,6 +19,8 @@ type Options struct {
 	PrettyTablesOptions *PrettyTablesOptions // Configures pretty ASCII rendering for table elements.
 	OmitLinks           bool                 // Turns on omitting links
 	TextOnly            bool                 // Returns only plain text
+	StripByID           bool                 // Turns on getElementByID and returns stripped child elements of ID attribute
+	ElementID           string
 }
 
 // PrettyTablesOptions overrides tablewriter behaviors
@@ -74,6 +76,11 @@ func FromHTMLNode(doc *html.Node, o ...Options) (string, error) {
 		buf:     bytes.Buffer{},
 		options: options,
 	}
+
+	if ctx.options.StripByID {
+		doc = GetElementByID(doc, ctx.options.ElementID)
+	}
+
 	if err := ctx.traverse(doc); err != nil {
 		return "", err
 	}
@@ -91,6 +98,7 @@ func FromReader(reader io.Reader, options ...Options) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	doc, err := html.Parse(newReader)
 	if err != nil {
 		return "", err
@@ -545,4 +553,39 @@ func getAttrVal(node *html.Node, attrName string) string {
 	}
 
 	return ""
+}
+
+func getAttribute(n *html.Node, key string) (string, bool) {
+	for _, attr := range n.Attr {
+		if attr.Key == key {
+			return attr.Val, true
+		}
+	}
+	return "", false
+}
+
+func hasID(n *html.Node, id string) bool {
+	if n.Type == html.ElementNode {
+		s, ok := getAttribute(n, "id")
+		if ok && s == id {
+			return true
+		}
+	}
+	return false
+}
+
+func GetElementByID(n *html.Node, id string) *html.Node {
+
+	if hasID(n, id) {
+		return n
+	}
+
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		result := GetElementByID(c, id)
+		if result != nil {
+			return result
+		}
+	}
+
+	return nil
 }

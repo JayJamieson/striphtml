@@ -22,6 +22,7 @@ var (
 	omitLinks    bool
 	textOnly     bool
 	port         int
+	elementID    string
 	httpClient   *http.Client = &http.Client{
 		Timeout: 5 * time.Second,
 	}
@@ -34,6 +35,7 @@ func init() {
 	rootCmd.Flags().BoolVarP(&omitLinks, "omit-links", "l", false, "Omit links.")
 	rootCmd.Flags().BoolVar(&textOnly, "pretty", false, "Print text in prettified format.")
 	rootCmd.Flags().IntVarP(&port, "port", "p", 8080, "Port to run HTTP server on")
+	rootCmd.Flags().StringVarP(&elementID, "id", "i", "", "Output plain text of all child elements of ID")
 }
 
 // rootCmd represents the base command when called without any subcommands
@@ -91,6 +93,8 @@ func runCli(cmd *cobra.Command, args []string) {
 		PrettyTables: prettyTables,
 		OmitLinks:    omitLinks,
 		TextOnly:     !textOnly,
+		StripByID:    elementID != "",
+		ElementID:    elementID,
 	}
 
 	out, err := striphtml.FromReader(reader, opts)
