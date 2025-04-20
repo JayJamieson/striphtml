@@ -1069,8 +1069,10 @@ func BenchmarkFromString(b *testing.B) {
 			</table>
 		</body>
 	</html>`
-	_, err := FromString(inputHTML, Options{PrettyTables: true})
-	if err != nil {
-		panic(err)
+
+	for b.Loop() {
+		if _, err := FromString(inputHTML, Options{PrettyTables: true}); err != nil {
+			b.Error(err)
+		}
 	}
 }
