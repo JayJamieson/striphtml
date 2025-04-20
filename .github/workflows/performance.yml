@@ -1,0 +1,31 @@
+name: Deployment
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+
+env:
+  ENVIRONMENT: "production"
+
+jobs:
+  performance_regression_test:
+    name: Performance regression test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '^1.21.3' # The Go version to download (if necessary) and use.
+ # Run benchmark with `go test -bench` and stores the output to a file
+      - name: Run benchmark
+        run: go test -bench 'BenchmarkFib' | tee output.txt
+      - name: Analyze benchmark results with Nyrkiö
+        uses: nyrkio/change-detection@v2
+        with:
+          tool: 'go'
+          output-file-path: output.txt
+          # Pick up your token at https://nyrkio.com/docs/getting-started
+          nyrkio-token: ${{ secrets.NYRKIO_JWT_TOKEN }}
