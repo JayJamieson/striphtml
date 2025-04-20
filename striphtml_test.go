@@ -9,6 +9,7 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+	"time"
 )
 
 const destPath = "testdata"
@@ -1069,7 +1070,7 @@ func BenchmarkFromString(b *testing.B) {
 			</table>
 		</body>
 	</html>`
-
+	time.Sleep(2 * time.Second) // Sleep to ensure the benchmark is not too fast.
 	_, err := FromString(inputHTML, Options{PrettyTables: true})
 	if err != nil {
 		panic(err)
